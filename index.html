@@ -154,9 +154,18 @@
             <button
               class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               @click.prevent="addOne()"
+              v-if="!isEditing"
             >
               Ajouter Monstre
             </button>
+          </button>
+          <!-- BOUTON MODIFIER -->
+          <button
+            class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            @click.prevent="updateOneById(inputMonsters.id)"
+            v-else
+          >
+          Modifier Monstre
           </form>
         </div>
 
@@ -234,7 +243,7 @@
           <!-- Carte de monstre -->
           <div
             class="monster-card bg-gray-700 rounded-lg shadow-lg p-6"
-            data-monster-type="aquatique"
+            :data-monster-type="monster.type"
             v-for="monster in monsters"
             :key="monster.id"
           >
@@ -251,11 +260,13 @@
             <div class="text-right">
               <button
                 class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-full"
+                @click.prevent="editOneById(monster.id)"
               >
                 Modifier
               </button>
               <button
                 class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-full"
+              
                 @click.prevent="deleteOneById(monsters.id)"
               >
                 Supprimer
@@ -297,6 +308,7 @@
               pv: "",
               attaque: "",
               description: "",
+              isEditing: false,
             },
           };
         },
@@ -318,6 +330,28 @@
               this.monsters.findIndex((item) => item.id == id),
               1
             );
+          },
+          editOneById(id) {
+            this.isEditing = true;
+            this.inputMonsters = {
+              ...this.monsters.find((item) => item.id == id),
+            };
+          },
+          updateOneById(id) {
+            this.monsters.splice(
+              this.monsters.findIndex((item) => item.id == id),
+              1,
+              { ...this.inputMonsters }
+            );
+            this.inputMonsters = {
+              id: null,
+              name: "",
+              type: "",
+              pv: "",
+              attaque: "",
+              description: "",
+            };
+            this.isEditing = false;
           },
         },
         watch: {
