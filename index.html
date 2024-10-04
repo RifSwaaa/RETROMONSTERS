@@ -102,6 +102,7 @@
                 type="text"
                 class="w-full p-2 bg-gray-800 text-white rounded"
                 placeholder="Nom du monstre"
+                v-model="inputMonsters.name"
               />
             </div>
 
@@ -113,6 +114,7 @@
                   type="number"
                   class="w-full p-2 bg-gray-800 text-white rounded"
                   placeholder="PV"
+                  v-model="inputMonsters.pv"
                 />
               </div>
               <div>
@@ -121,6 +123,7 @@
                   type="number"
                   class="w-full p-2 bg-gray-800 text-white rounded"
                   placeholder="Attaque"
+                  v-model="inputMonsters.attaque"
                 />
               </div>
             </div>
@@ -130,12 +133,16 @@
               <textarea
                 class="w-full p-2 bg-gray-800 text-white rounded"
                 placeholder="Description du monstre"
+                v-model="inputMonsters.description"
               ></textarea>
             </div>
 
             <div>
               <label class="block mb-2">Type de Monstre</label>
-              <select class="w-full p-2 bg-gray-800 text-white rounded">
+              <select
+                class="w-full p-2 bg-gray-800 text-white rounded"
+                v-model="inputMonsters.type"
+              >
                 <option value="aquatique">Aquatique</option>
                 <option value="terrestre">Terrestre</option>
                 <option value="volant">Volant</option>
@@ -146,6 +153,7 @@
 
             <button
               class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              @click.prevent="addOne()"
             >
               Ajouter Monstre
             </button>
@@ -281,7 +289,29 @@
         data() {
           return {
             monsters: JSON.parse(localStorage.getItem("monsters")) || [],
+            inputMonsters: {
+              id: null,
+              name: "",
+              type: "",
+              pv: "",
+              attaque: "",
+              description: "",
+            },
           };
+        },
+        methods: {
+          addOne() {
+            this.inputMonsters.id = Date.now();
+            this.monsters.push({ ...this.inputMonsters });
+            this.inputMonsters = {
+              id: null,
+              name: "",
+              type: "",
+              pv: "",
+              attaque: "",
+              description: "",
+            };
+          },
         },
         watch: {
           monsters: {
