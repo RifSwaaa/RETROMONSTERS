@@ -244,7 +244,7 @@
           <div
             class="monster-card bg-gray-700 rounded-lg shadow-lg p-6"
             :data-monster-type="monster.type"
-            v-for="monster in monsters"
+            v-for="monster in sortedMonsters"
             :key="monster.id"
           >
             <img
@@ -312,6 +312,14 @@
             },
           };
         },
+        computed: {
+         
+          sortedMonsters() {
+            return this.monsters.sort((a, b) => {
+              return a.name.localeCompare(b.name);
+            });
+          },
+          },
         methods: {
           addOne() {
             this.inputMonsters.id = Date.now();
